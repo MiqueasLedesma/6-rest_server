@@ -1,8 +1,14 @@
+// Librerias
 const { Router } = require("express");
 const { check } = require("express-validator");
 
 // Middlewares
-const { validateFields } = require("../middlewares/validateFields");
+const {
+  validateFields,
+  validateJWT,
+  hasRole,
+  isAdminRole,
+} = require("../middlewares");
 
 // Validaciones
 const {
@@ -33,6 +39,7 @@ router.get(
 router.put(
   "/:id",
   [
+    hasRole("ADMIN_ROLE", "USER_ROLE"),
     check("id", "No es un ID válido").isMongoId(),
     check("email", "El email no es válido").isEmail(),
     check("id").custom(userByIdExist),
@@ -61,6 +68,8 @@ router.post(
 router.delete(
   "/:id",
   [
+    validateJWT,
+    isAdminRole,
     check("id", "No es un ID válido").isMongoId(),
     check("id").custom(userByIdExist),
     validateFields,

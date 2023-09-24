@@ -1,5 +1,6 @@
 const Role = require("../models/role");
 const User = require("../models/user");
+const bcrypt = require("bcryptjs");
 
 const validateRol = async (role = "") => {
   const exist = await Role.findOne({ role });
@@ -11,13 +12,13 @@ const emailExist = async (email = "") => {
   if (exist) throw new Error(`El email: ${email}, ya esta registrado`);
 };
 
-const userByIdExist = async (id ="") => {
+const userByIdExist = async (id = "") => {
   const exist = await User.findById(id);
-  if(!exist) throw new Error(`El usuario con ID: ${id} no existe`);
-}
+  if (!exist) throw new Error(`El usuario con ID: ${id} no existe`);
+};
 
 module.exports = {
   validateRol,
-  emailExist, 
+  emailExist,
   userByIdExist
 };

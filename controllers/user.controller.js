@@ -55,6 +55,9 @@ const userPost = async (req = request, res = response) => {
 const userDelete = async (req = request, res = response) => {
   const { id } = req.params;
 
+  console.log(req.user);
+
+
   try {
     const user = await User.findByIdAndUpdate(id, { estate: false });
     return res.json(user);
