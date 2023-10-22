@@ -1,0 +1,62 @@
+const { Router } = require("express");
+const { check } = require("express-validator");
+
+const { validateJWT, validateFields, isAdminRole } = require("../middlewares");
+
+const { products: controller } = require("../controllers");
+
+const { productExist, categoryExist } = require("../helpers/db-validators");
+// TODO: Crear validador de producto (ProductExist);
+
+const router = Router();
+
+// Obtener todos los productos - Publico
+router.get("/", controller.getProducts);
+
+// Obtener un producto por ID - Publico
+router.get(
+  "/:id",
+  [check("id").isMongoId().custom(productExist), validateFields],
+  controller.getProduct
+);
+
+// Crear productos - privado - cualquier persona con token válido
+router.post(
+  "/",
+  [
+    validateJWT,
+    check("name", "El nombre es obligatorio").not().isEmpty(),
+    check("category", "La categoria es obligatoria").isMongoId(),
+    check("category").custom(categoryExist),
+    validateFields,
+  ],
+  controller.createProduct
+);
+
+// Actualizar un producto por ID - privado - Admin
+router.put(
+  "/:id",
+  [
+    validateJWT,
+    isAdminRole,
+    check("id", "ID invalido").isMongoId(),
+    check("id").custom(productExist),
+    validateFields,
+  ],
+  controller.updateProduct
+);
+
+// Borrar un producto por ID - Admin
+router.delete(
+  "/:id",
+  [
+    validateJWT,
+    isAdminRole,
+    check("id", "ID invalido").isMongoId(),
+    check("id").custom(productExist),
+    validateFields,
+  ],
+  controller.deleteProduct
+);
+
+module.exports = router;
