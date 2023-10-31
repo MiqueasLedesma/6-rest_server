@@ -6,7 +6,6 @@ const { validateJWT, validateFields, isAdminRole } = require("../middlewares");
 const { products: controller } = require("../controllers");
 
 const { productExist, categoryExist } = require("../helpers/db-validators");
-// TODO: Crear validador de producto (ProductExist);
 
 const router = Router();
 

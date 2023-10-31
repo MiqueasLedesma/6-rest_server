@@ -13,12 +13,19 @@ module.exports = {
     const exist = await Category.findById(id);
     if (!exist) throw new Error(`La categoria con ID ${id} no existe`);
   },
-  userByIdExist:  async (id = "") => {
+  userByIdExist: async (id = "") => {
     const exist = await User.findById(id);
     if (!exist) throw new Error(`El usuario con ID ${id} no existe`);
   },
   productExist: async (id = "") => {
     const exist = await Product.findById(id);
-    if(!exist) throw new Error(`El producto con ID ${id} no existe`);
-  }
-}
+    if (!exist) throw new Error(`El producto con ID ${id} no existe`);
+  },
+  allowedCollections: (collection = "", collections = "") => {
+    if (!collections.includes(collection))
+      throw new Error(
+        `La colección ${collection} no es válida - ${collections}`
+      );
+    return true;
+  },
+};
