@@ -15,7 +15,7 @@ const searchUsers = async (term = "", res = response) => {
   const regex = new RegExp(term, "i");
 
   const query = {
-    $and: [{ $or: [{ name: regex }, { email: regex }] }, { estate: true }],
+    $and: [{ $or: [{ name: regex }, { email: regex }] }, { state: true }],
   };
 
   const [total, users] = await Promise.all([

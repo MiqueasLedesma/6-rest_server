@@ -22,7 +22,7 @@ const validateJWT = async (req = request, res = response, next) => {
       });
     }
 
-    if (!user.estate) {
+    if (!user.state) {
       return res.status(401).json({
         msg: "Usuario eliminado",
       });

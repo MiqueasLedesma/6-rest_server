@@ -22,7 +22,7 @@ const userSchema = Schema({
     require: true,
     enum: ["ADMIN_ROLE", "USER_ROLE"],
   },
-  estate: {
+  state: {
     type: Boolean,
     default: true,
   },

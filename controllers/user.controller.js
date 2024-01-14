@@ -9,7 +9,7 @@ module.exports = {
     try {
       const [total, users] = await Promise.all([
         User.countDocuments(),
-        User.find({ estate: true }).limit(limit).skip(skip),
+        User.find({ state: true }).limit(limit).skip(skip),
       ]);
       return res.json({ total, users });
     } catch (error) {
@@ -54,7 +54,7 @@ module.exports = {
     const { id } = req.params;
 
     try {
-      const user = await User.findByIdAndUpdate(id, { estate: false });
+      const user = await User.findByIdAndUpdate(id, { state: false });
       return res.json(user);
     } catch (error) {
       console.log(error);

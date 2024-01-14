@@ -39,8 +39,9 @@ router.get(
 router.put(
   "/:id",
   [
-    hasRole("ADMIN_ROLE", "USER_ROLE"),
     check("id", "No es un ID válido").isMongoId(),
+    validateJWT,
+    hasRole("ADMIN_ROLE", "USER_ROLE"),
     check("email", "El email no es válido").isEmail(),
     check("id").custom(userByIdExist),
     check("role").custom(validateRol),

@@ -3,12 +3,17 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("express");
 const fileUpload = require("express-fileupload");
+const { createServer } = require("http");
 
 const { conn } = require("../db/config");
+const { socketController } = require("../sockets/socket.controller");
 
 class Server {
   constructor() {
     this.app = express();
+    this.server = createServer(this.app);
+    this.io = require("socket.io")(this.server);
+
     this.paths = {
       auth: "/api/auth",
       categories: "/api/categories",
@@ -26,6 +31,9 @@ class Server {
 
     // Rutas de mi app
     this.routes();
+
+    // Sockets
+    this.sockets();
 
     // Puerto
     this.port = process.env.PORT || 8080;
@@ -64,8 +72,12 @@ class Server {
     this.app.use(this.paths.uploads, require("../routes/uploads.route"));
   }
 
+  sockets() {
+    this.io.on("connection", (socket) => socketController(socket, this.io));
+  }
+
   listen() {
-    this.app.listen(this.port, () =>
+    this.server.listen(this.port, () =>
       console.log(`Server listening on port: ${this.port}`)
     );
   }
